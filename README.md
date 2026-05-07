@@ -20,8 +20,8 @@ Depuis l'impact, ce tableau de bord assure le suivi en temps réel des **trois p
 
 | Module              | Rôle dans le bunker                                                       | Collection |
 |---------------------|---------------------------------------------------------------------------|------------|
-| 📦 **BunkerStock** | Inventaire des ressources critiques (eau, nourriture, munitions, médical…) | `stocks`  |
-| 🛠 **BunkerOps**    | Surveillance des zones (statut opérationnel, niveau de danger)             | `zones`   |
+| 📦 **BunkerStocks** | Inventaire des ressources critiques (eau, nourriture, munitions, médical…) | `stocks`  |
+| 🛠 **BunkerZones**    | Surveillance des zones (statut opérationnel, niveau de danger)            | `zones`   |
 | 🧑‍🚀 **BunkerCrew**  | Registre des survivants (rôle, état, compétences)                          | `crew`    |
 
 Un **Dashboard** central agrège ces données en un **indice global de survie** calculé en temps réel, accompagné d'un **compteur des jours écoulés depuis l'impact**.
