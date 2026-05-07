@@ -1,7 +1,8 @@
 # ☢ APOCALISTE — BUNKER EDITION
 
 ╔═══════════════════════════════════════════════╗
-║  TRANSMISSION CHIFFRÉE — BUNKER CONTROL ALPHA ║
+║  TRANSMISSION CHIFFRÉE — BUNKER CONTROL ALPHA 
+║
 ║  PROTOCOLE : Apocaliste / Système de gestion  ║
 ║  STATUT    : EN OPÉRATION                     ║
 ╚═══════════════════════════════════════════════╝
