@@ -65,11 +65,11 @@ Le bunker s'éveille. Quatre conteneurs entrent en service.
 
 **Points d'accès** :
 _______________________________________________________________________________
-| URL                                 |   Description                         |
-|-------------------------------------|---------------------------------------|
-| 🛡 `http://localhost`                | **Interface principale** (via nginx) |
-| ⚛ `http://localhost:5173`           | Client React direct (debug)          |
-| 🔌`http://localhost:5000/api/health`| Diagnostic de l'API                  |
+| URL                                  |   Description                         |
+|--------------------------------------|---------------------------------------|
+| 🛡 `http://localhost`                | **Interface principale** (via nginx ) |
+| ⚛ `http://localhost:5173`           | Client React direct (debug)            |
+| 🔌`http://localhost:5000/api/health`| Diagnostic de l'API                    |
 ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 Le **live reload** est actif : modifier un fichier dans `client/src` ou `api/` recharge automatiquement le service concerné. Aucun redémarrage manuel requis.
 
