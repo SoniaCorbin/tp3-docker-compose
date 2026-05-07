@@ -4,8 +4,10 @@
 
 services:
   database:
-    image: mongo:7
-    container_name: Apocalistee_db
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    container_name: apocalist_db
     restart: unless-stopped
     volumes:
       - database_data:/data/db
