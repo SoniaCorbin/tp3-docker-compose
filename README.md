@@ -290,8 +290,11 @@ nginx crashait avec `not a directory: Are you trying to mount a directory onto a
 - 🌐 **Reverse proxy nginx** masquant l'organisation interne des services
 
 ---
-
-> **END OF TRANSMISSION**
-> *Le bunker tient. Pour l'instant.*
-
+```text
+╔═══════════════════════════════════════════════╗
+║  FIN DE TRANSMISSION                          ║
+║  SURVIE AUTONOME RECOMMANDÉE                  ║
+║  BUNKER CONTROL ALPHA HORS LIGNE              ║
+╚═══════════════════════════════════════════════╝
+```
 **Apocaliste © Bunker Control — TP3 Docker Compose**
