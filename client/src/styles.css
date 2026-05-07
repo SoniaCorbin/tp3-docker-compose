@@ -496,3 +496,56 @@ input:focus, select:focus {
   from { text-shadow: 0 0 8px rgba(255, 138, 31, 0.8), 0 0 18px rgba(255, 138, 31, 0.5); }
   to   { text-shadow: 0 0 14px rgba(255, 138, 31, 1), 0 0 28px rgba(255, 138, 31, 0.7); }
 }
+
+/* === Carte tactique === */
+.map-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .map-layout { grid-template-columns: 1fr; }
+}
+
+.map-card { padding: 12px; }
+
+.bunker-map {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.zone-pulse {
+  animation: zone-alert 1.2s ease-in-out infinite;
+}
+
+@keyframes zone-alert {
+  0%, 100% { fill-opacity: 0.12; stroke-width: 1.5; }
+  50%      { fill-opacity: 0.4;  stroke-width: 3; }
+}
+
+.map-side h3 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: var(--text-dim);
+}
+
+.legend-row .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px currentColor;
+}

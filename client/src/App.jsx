@@ -4,6 +4,7 @@ import DashboardPage from './pages/DashboardPage.jsx';
 import StocksPage from './pages/StocksPage.jsx';
 import ZonesPage from './pages/ZonesPage.jsx';
 import CrewPage from './pages/CrewPage.jsx';
+import MapPage from './pages/MapPage.jsx';
 
 // 📅 Date du début de l'apocalypse (change-la si tu veux un autre point de départ)
 const APOCALYPSE_START = new Date('2026-01-01');
@@ -54,6 +55,7 @@ export default function App() {
           <NavLink to="/stocks" className="nav-link">BunkerStock</NavLink>
           <NavLink to="/zones" className="nav-link">BunkerZones</NavLink>
           <NavLink to="/crew" className="nav-link">BunkerCrew</NavLink>
+          <NavLink to="/map" className="nav-link">Carte</NavLink>
         </nav>
       </header>
 
@@ -65,6 +67,7 @@ export default function App() {
           <Route path="/zones" element={<ZonesPage />} />
           <Route path="/crew" element={<CrewPage />} />
           <Route path="*" element={<p className="empty">Zone inconnue du bunker.</p>} />
+          <Route path="/map" element={<MapPage />} />
         </Routes>
       </main>
 
