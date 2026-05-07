@@ -1,8 +1,12 @@
 # ☢ APOCALISTE — BUNKER EDITION
 
-> **TRANSMISSION CHIFFRÉE — BUNKER CONTROL ALPHA**
-> **PROTOCOLE** : Apocaliste / Système de gestion
-> **STATUT** : EN OPÉRATION
+```text
+╔═══════════════════════════════════════════════╗
+║  TRANSMISSION CHIFFRÉE — BUNKER CONTROL ALPHA ║
+║  PROTOCOLE : Apocaliste / Système de gestion  ║
+║  STATUT    : EN OPÉRATION                     ║
+╚═══════════════════════════════════════════════╝
+```
 
 **Tableau de bord de survie post-apocalyptique**
 *Architecture multi-services Docker — TP3*
