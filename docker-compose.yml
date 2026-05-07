@@ -1,9 +1,16 @@
+# Apocalistee — environnement de DÉVELOPPEMENT
+# Lancement : docker compose up --build
+# Accès : http://localhost (passe par nginx) ou http://localhost:5173 (vite direct)
+
 services:
   database:
     image: mongo:7
-    container_name: tp3_database
+    container_name: Apocalistee_db
+    restart: unless-stopped
     volumes:
       - database_data:/data/db
+    networks:
+      - bunker
     ports:
       - "27017:27017"
 
@@ -11,17 +18,59 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
-    container_name: tp3_api
+    container_name: Apocalistee_api
+    restart: unless-stopped
     environment:
-      PORT: 5000
-      MONGO_URL: mongodb://database:27017/tp3
+      - PORT=5000
+      - MONGO_URL=mongodb://database:27017/Apocalistee
+      - NODE_ENV=development
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    command: ["npx", "nodemon", "server.js"]
     ports:
       - "5000:5000"
     depends_on:
       - database
+    networks:
+      - bunker
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: Apocalistee_client
+    restart: unless-stopped
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
     volumes:
-      - ./api:/app
+      - ./client:/app
       - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    networks:
+      - bunker
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: Apocalistee_nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+      - client
+    networks:
+      - bunker
 
 volumes:
   database_data:
+
+networks:
+  bunker:
+    driver: bridge
+    

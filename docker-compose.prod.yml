@@ -1,0 +1,59 @@
+services:
+  database:
+    image: mongo:7
+    container_name: Apocalistee_db_prod
+    restart: unless-stopped
+    volumes:
+      - database_data:/data/db
+    networks:
+      - bunker
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: Apocalistee_api_prod
+    restart: unless-stopped
+    environment:
+      - PORT=5000
+      - MONGO_URL=mongodb://database:27017/Apocalistee
+      - NODE_ENV=production
+    depends_on:
+      - database
+    networks:
+      - bunker
+
+  client-build:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    container_name: Apocalistee_client_build
+    volumes:
+      - client_dist:/shared
+    networks:
+      - bunker
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: Apocalistee_nginx_prod
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/conf.d/default.conf:ro
+      - client_dist:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+    depends_on:
+      api:
+        condition: service_started
+      client-build:
+        condition: service_completed_successfully
+    networks:
+      - bunker
+
+volumes:
+  database_data:
+  client_dist:
+
+networks:
+  bunker:
+    driver: bridge
