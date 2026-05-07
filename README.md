@@ -1,15 +1,16 @@
-# ☢ APOCALISTE — BUNKER EDITION
+markdown<div align="center">
 
+# ☢ APOCALISTE — BUNKER EDITION
 ╔═══════════════════════════════════════════════╗
 ║  TRANSMISSION CHIFFRÉE — BUNKER CONTROL ALPHA ║
-║                                               ║
-║  PROTOCOLE : Apocaliste / Système de gestion  ║ 
-║                                               ║
+║  PROTOCOLE : Apocaliste / Système de gestion  ║
 ║  STATUT    : EN OPÉRATION                     ║
 ╚═══════════════════════════════════════════════╝
 
 **Tableau de bord de survie post-apocalyptique**
 *Architecture multi-services Docker — TP3*
+
+</div>
 
 ---
 
@@ -18,11 +19,11 @@
 Bienvenue, Opérateur. Vous accédez à **Apocaliste**, le système de gestion centralisé du bunker.
 Depuis l'impact, ce tableau de bord assure le suivi en temps réel des **trois piliers de la survie** :
 
-| Module              | Rôle dans le bunker                                                       | Collection |
-|---------------------|---------------------------------------------------------------------------|------------|
-| 📦 **BunkerStocks** | Inventaire des ressources critiques (eau, nourriture, munitions, médical…) | `stocks`  |
-| 🛠 **BunkerZones**    | Surveillance des zones (statut opérationnel, niveau de danger)            | `zones`   |
-| 🧑‍🚀 **BunkerCrew**  | Registre des survivants (rôle, état, compétences)                          | `crew`    |
+| Module | Rôle dans le bunker | Collection |
+|---|---|---|
+| 📦 **BunkerStock** | Inventaire des ressources critiques (eau, nourriture, munitions, médical…) | `stocks` |
+| 🛠 **BunkerOps** | Surveillance des zones (statut opérationnel, niveau de danger) | `zones` |
+| 🧑‍🚀 **BunkerCrew** | Registre des survivants (rôle, état, compétences) | `crew` |
 
 Un **Dashboard** central agrège ces données en un **indice global de survie** calculé en temps réel, accompagné d'un **compteur des jours écoulés depuis l'impact**.
 
@@ -47,14 +48,14 @@ Un **Dashboard** central agrège ces données en un **indice global de survie** 
                       ┌───▼──────────┐
                       │   MongoDB    │
                       └──────────────┘
-_________________________________________________________________________________________________
-| Service    |   Stack                           | Port (dev) |                     Port (prod) |
-|------------|-----------------------------------|:----------:|:-------------------------------:|
-| `nginx`    | nginx 1.27 alpine                 | `80`       | `80`                            |
-| `client`   | React 18 + Vite 5 + React Router  | `5173`     | _(servi en statique par nginx)_ |
-| `api`      | Node.js 20 + Express + Mongoose   | `5000`     | _(interne)_                     |
-| `database` | MongoDB 7                         | `27017`    | _(interne)_                     |
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
+| Service | Stack | Port (dev) | Port (prod) |
+|---|---|:---:|:---:|
+| `nginx` | nginx 1.27 alpine | `80` | `80` |
+| `client` | React 18 + Vite 5 + React Router | `5173` | _(servi en statique par nginx)_ |
+| `api` | Node.js 20 + Express + Mongoose | `5000` | _(interne)_ |
+| `database` | MongoDB 7 | `27017` | _(interne)_ |
+
 ---
 
 ## 🚀 PROTOCOLE D'ACTIVATION — DÉVELOPPEMENT
@@ -66,13 +67,13 @@ docker compose up --build
 Le bunker s'éveille. Quatre conteneurs entrent en service.
 
 **Points d'accès** :
-_______________________________________________________________________________
-| URL                                  |   Description                         |
-|--------------------------------------|---------------------------------------|
-| 🛡 `http://localhost`                | **Interface principale** (via nginx ) |
-| ⚛ `http://localhost:5173`           | Client React direct (debug)            |
-| 🔌`http://localhost:5000/api/health`| Diagnostic de l'API                    |
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
+| URL | Description |
+|---|---|
+| 🛡 `http://localhost` | **Interface principale** (via nginx) |
+| ⚛ `http://localhost:5173` | Client React direct (debug) |
+| 🔌 `http://localhost:5000/api/health` | Diagnostic de l'API |
+
 Le **live reload** est actif : modifier un fichier dans `client/src` ou `api/` recharge automatiquement le service concerné. Aucun redémarrage manuel requis.
 
 **Pour mettre le bunker en veille** :
@@ -109,14 +110,14 @@ Application accessible uniquement sur **http://localhost** (port 80).
 ## 🔧 VARIABLES D'ENVIRONNEMENT
 
 Voir `.env.example` pour le détail. Variables principales :
-_______________________________________________________________________________________________________________
-| Variable       | Service |                          Exemple     | Description                               |
-|----------------|---------|--------------------------------------|-------------------------------------------|
-| `PORT`         | api     | `5000`                               | Port d'écoute de l'API                    |
-| `MONGO_URL`    | api     | `mongodb://database:27017/apocalist` | URL MongoDB (résolue via DNS Docker)      |
-| `NODE_ENV`     | api     | `development` / `production`         | Mode d'exécution                          |
-| `VITE_API_URL` | client  | `http://localhost:5000/api`          | URL API en dev (en prod : `/api` relatif) |
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+
+| Variable | Service | Exemple | Description |
+|---|---|---|---|
+| `PORT` | api | `5000` | Port d'écoute de l'API |
+| `MONGO_URL` | api | `mongodb://database:27017/apocalist` | URL MongoDB (résolue via DNS Docker) |
+| `NODE_ENV` | api | `development` / `production` | Mode d'exécution |
+| `VITE_API_URL` | client | `http://localhost:5000/api` | URL API en dev (en prod : `/api` relatif) |
+
 > 🔒 Le fichier `.env` n'est **jamais** commité (voir `.gitignore`). Seul `.env.example` est versionné.
 
 ---
@@ -124,6 +125,7 @@ ________________________________________________________________________________
 ## 🛣 ROUTES DE L'API
 
 ### Diagnostic
+GET    /api/health                   → Vérification de l'état de l'API
 
 ### 📦 BunkerStock — `/api/stocks`
 GET    /api/stocks                   → Liste toutes les ressources
@@ -203,6 +205,7 @@ tp3-apocaliste/
 ├── 📄 .env.example
 ├── 📄 .gitignore
 └── 📖 README.md
+
 ---
 
 ## 🛠 COMMANDES OPÉRATIONNELLES
@@ -289,10 +292,12 @@ docker volume ls                     # vérifier que le volume existe
 
 ---
 
-╔═════════════════════════════════╗
-║  END OF TRANSMISSION            ║
-║  LE BUNKER TIENT.               ║
-║  POUR L'INSTANT                 ║
-╚═════════════════════════════════╝
+<div align="center">
+═══════════════════════════════════════════════
+END OF TRANSMISSION
+Le bunker tient. Pour l'instant.
+═══════════════════════════════════════════════
 
 **Apocaliste © Bunker Control — TP3 Docker Compose**
+
+</div>
