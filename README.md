@@ -1,16 +1,11 @@
-markdown<div align="center">
-
 # ☢ APOCALISTE — BUNKER EDITION
-╔═══════════════════════════════════════════════╗
-║  TRANSMISSION CHIFFRÉE — BUNKER CONTROL ALPHA ║
-║  PROTOCOLE : Apocaliste / Système de gestion  ║
-║  STATUT    : EN OPÉRATION                     ║
-╚═══════════════════════════════════════════════╝
+
+> **TRANSMISSION CHIFFRÉE — BUNKER CONTROL ALPHA**
+> **PROTOCOLE** : Apocaliste / Système de gestion
+> **STATUT** : EN OPÉRATION
 
 **Tableau de bord de survie post-apocalyptique**
 *Architecture multi-services Docker — TP3*
-
-</div>
 
 ---
 
@@ -30,32 +25,35 @@ Un **Dashboard** central agrège ces données en un **indice global de survie** 
 ---
 
 ## ⚙ ARCHITECTURE
-          ┌────────────────────┐
-          │   Navigateur       │
-          └─────────┬──────────┘
-                    │ :80
-          ┌─────────▼──────────┐
-          │   nginx (proxy)    │
-          └────┬──────────┬────┘
-               │          │
-      /        │          │ /api
-               │          │
-    ┌──────────▼──┐   ┌───▼──────────┐
-    │  Client     │   │  API Express │
-    │  React+Vite │   │  Node.js     │
-    └─────────────┘   └───┬──────────┘
-                          │ :27017
-                      ┌───▼──────────┐
-                      │   MongoDB    │
-                      └──────────────┘
 
-| Service | Stack | Port (dev) | Port (prod) |
-|---|---|:---:|:---:|
-| `nginx` | nginx 1.27 alpine | `80` | `80` |
-| `client` | React 18 + Vite 5 + React Router | `5173` | _(servi en statique par nginx)_ |
-| `api` | Node.js 20 + Express + Mongoose | `5000` | _(interne)_ |
-| `database` | MongoDB 7 | `27017` | _(interne)_ |
-
+```
+              ┌────────────────────┐
+              │   Navigateur       │
+              └─────────┬──────────┘
+                        │ :80
+              ┌─────────▼──────────┐
+              │   nginx (proxy)    │
+              └────┬──────────┬────┘
+                   │          │
+          /        │          │ /api
+                   │          │
+        ┌──────────▼──┐   ┌───▼──────────┐
+        │  Client     │   │  API Express │
+        │  React+Vite │   │  Node.js     │
+        └─────────────┘   └───┬──────────┘
+                              │ :27017
+                          ┌───▼──────────┐
+                          │   MongoDB    │
+                          └──────────────┘
+```
+_________________________________________________________________________________________________
+| Service    | Stack                             | Port (dev) | Port (prod)                     |
+|------------|-----------------------------------|:----------:|:-------------------------------:|
+| `nginx`    | nginx 1.27 alpine                 | `80`       | `80`                            |
+| `client`   | React 18 + Vite 5 + React Router  | `5173`     | _(servi en statique par nginx)_ |
+| `api`      | Node.js 20 + Express + Mongoose   | `5000`     | _(interne)_                     |
+| `database` | MongoDB 7                         | `27017`    | _(interne)_                     |
+-------------------------------------------------------------------------------------------------
 ---
 
 ## 🚀 PROTOCOLE D'ACTIVATION — DÉVELOPPEMENT
@@ -68,13 +66,13 @@ Le bunker s'éveille. Quatre conteneurs entrent en service.
 
 **Points d'accès** :
 
-| URL | Description |
-|---|---|
-| 🛡 `http://localhost` | **Interface principale** (via nginx) |
-| ⚛ `http://localhost:5173` | Client React direct (debug) |
-| 🔌 `http://localhost:5000/api/health` | Diagnostic de l'API |
+| URL                                   | Description                            |
+|-------------------------------------- |----------------------------------------|
+| 🛡 `http://localhost`                 | **Interface principale** (via nginx)   |
+| ⚛ `http://localhost:5173`            | Client React direct (debug)            |
+| 🔌 `http://localhost:5000/api/health`| Diagnostic de l'API                    |
 
-Le **live reload** est actif : modifier un fichier dans `client/src` ou `api/` recharge automatiquement le service concerné. Aucun redémarrage manuel requis.
+Le **live reload** est actif : modifier un fichier dans `client/src` ou `api/` recharge automatiquement le service concerné.
 
 **Pour mettre le bunker en veille** :
 
@@ -109,58 +107,69 @@ Application accessible uniquement sur **http://localhost** (port 80).
 
 ## 🔧 VARIABLES D'ENVIRONNEMENT
 
-Voir `.env.example` pour le détail. Variables principales :
+Voir `.env.example` pour le détail.
+______________________________________________________________________________________________________________
+| Variable       | Service | Exemple                              | Description                              |
+|----------------|---------|--------------------------------------|------------------------------------------|
+| `PORT`         | api     | `5000`                               | Port d'écoute de l'API                   |
+| `MONGO_URL`    | api     | `mongodb://database:27017/apocalist` | URL MongoDB (résolue via DNS Docker)     |
+| `NODE_ENV`     | api     | `development` / `production`         | Mode d'exécution                         |
+| `VITE_API_URL` | client  | `http://localhost:5000/api`          | URL API en dev (en prod : `/api` relatif)|
+--------------------------------------------------------------------------------------------------------------
 
-| Variable | Service | Exemple | Description |
-|---|---|---|---|
-| `PORT` | api | `5000` | Port d'écoute de l'API |
-| `MONGO_URL` | api | `mongodb://database:27017/apocalist` | URL MongoDB (résolue via DNS Docker) |
-| `NODE_ENV` | api | `development` / `production` | Mode d'exécution |
-| `VITE_API_URL` | client | `http://localhost:5000/api` | URL API en dev (en prod : `/api` relatif) |
-
-> 🔒 Le fichier `.env` n'est **jamais** commité (voir `.gitignore`). Seul `.env.example` est versionné.
+> 🔒 Le fichier `.env` n'est jamais commité (voir `.gitignore`). Seul `.env.example` est versionné.
 
 ---
 
 ## 🛣 ROUTES DE L'API
 
 ### Diagnostic
+
+```
 GET    /api/health                   → Vérification de l'état de l'API
+```
 
 ### 📦 BunkerStock — `/api/stocks`
+
+```
 GET    /api/stocks                   → Liste toutes les ressources
 GET    /api/stocks/:id               → Détail d'une ressource
 POST   /api/stocks                   → Crée une ressource
 PUT    /api/stocks/:id               → Modifie une ressource
 DELETE /api/stocks/:id               → Supprime une ressource
+```
 
-**Champs** : `name`, `category`, `quantity`, `priority`, `survivalIndex` *(calculé : `quantity × poids(priority)`)*
+**Champs** : `name`, `category`, `quantity`, `priority`, `survivalIndex` *(calculé)*
 
-### 🛠 BunkerOps — `/api/zones`
+### 🛠 BunkerZone — `/api/zones`
+
+```
 GET    /api/zones                    → Liste toutes les zones
 GET    /api/zones/:id                → Détail d'une zone
 POST   /api/zones                    → Crée une zone
 PUT    /api/zones/:id                → Modifie une zone
 DELETE /api/zones/:id                → Supprime une zone
+```
 
 **Champs** : `name`, `status` *(operational / maintenance / critical)*, `dangerLevel` (0-10), `description`
 
 ### 🧑‍🚀 BunkerCrew — `/api/crew`
+
+```
 GET    /api/crew                     → Liste tous les survivants
 GET    /api/crew/:id                 → Détail d'un survivant
 POST   /api/crew                     → Enregistre un survivant
 PUT    /api/crew/:id                 → Modifie un survivant
 DELETE /api/crew/:id                 → Retire un survivant du registre
+```
 
 **Champs** : `name`, `role`, `skillLevel` (1-10), `state` *(ok / injured / missing)*, `survivalProbability` *(calculé)*
 
 ### Exemple de transmission
 
 ```bash
-# Vérifier que l'API répond
 curl http://localhost/api/health
 
-# Stocker une ressource critique
 curl -X POST http://localhost/api/stocks \
   -H "Content-Type: application/json" \
   -d '{"name":"Eau potable","category":"eau","quantity":50,"priority":"critical"}'
@@ -169,42 +178,44 @@ curl -X POST http://localhost/api/stocks \
 ---
 
 ## 📁 STRUCTURE DU BUNKER
+
+```
 tp3-apocaliste/
-│
-├── 📦 client/                    # Module d'interface — React + Vite
+├── client/                       # Module d'interface — React + Vite
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── DashboardPage.jsx     # Tableau de bord global
-│   │   │   ├── StocksPage.jsx        # Module BunkerStock
-│   │   │   ├── ZonesPage.jsx         # Module BunkerOps
-│   │   │   └── CrewPage.jsx          # Module BunkerCrew
-│   │   ├── App.jsx                   # Routing + compteur d'apocalypse
-│   │   ├── api.js                    # Client HTTP
+│   │   │   ├── DashboardPage.jsx
+│   │   │   ├── StocksPage.jsx
+│   │   │   ├── ZonesPage.jsx
+│   │   │   └── CrewPage.jsx
+│   │   ├── App.jsx
+│   │   ├── api.js
 │   │   ├── main.jsx
-│   │   └── styles.css                # Thème bunker (LED, glow, monospace)
+│   │   └── styles.css
 │   ├── Dockerfile / Dockerfile.prod
 │   ├── index.html, package.json, vite.config.js
 │
-├── ⚙ api/                        # API Node.js Express + Mongoose
+├── api/                          # API Node.js Express + Mongoose
 │   ├── models/
-│   │   ├── Stock.js                  # Schéma + calcul survivalIndex
+│   │   ├── Stock.js
 │   │   ├── Zone.js
-│   │   └── Crew.js                   # Schéma + calcul survivalProbability
+│   │   └── Crew.js
 │   ├── routes/
-│   │   ├── stocks.js                 # CRUD complet
+│   │   ├── stocks.js
 │   │   ├── zones.js
 │   │   └── crew.js
 │   ├── server.js, package.json, Dockerfile
 │
-├── 🌐 nginx/
-│   ├── nginx.dev.conf                # Proxy → Vite + API
-│   └── nginx.prod.conf               # Sert le build statique + proxy /api
+├── nginx/
+│   ├── nginx.dev.conf
+│   └── nginx.prod.conf
 │
-├── 🐳 docker-compose.yml             # Environnement de développement
-├── 🐳 docker-compose.prod.yml        # Environnement de production
-├── 📄 .env.example
-├── 📄 .gitignore
-└── 📖 README.md
+├── docker-compose.yml
+├── docker-compose.prod.yml
+├── .env.example
+├── .gitignore
+└── README.md
+```
 
 ---
 
@@ -216,7 +227,7 @@ docker compose ps
 
 # Logs en temps réel
 docker compose logs -f
-docker compose logs -f api          # logs d'un service en particulier
+docker compose logs -f api
 
 # Reconstruire un service après modification du Dockerfile
 docker compose up --build api
@@ -225,8 +236,8 @@ docker compose up --build api
 docker compose exec api sh
 docker compose exec database mongosh apocalist
 
-# Volume MongoDB
-docker volume ls                     # vérifier que le volume existe
+# Vérifier les volumes
+docker volume ls
 ```
 
 ---
@@ -235,35 +246,19 @@ docker volume ls                     # vérifier que le volume existe
 
 ### 1. Live reload de Vite inactif
 
-**Symptôme** : modifier un fichier `.jsx` ne déclenche pas le rechargement du navigateur.
-
-**Cause** : le watcher de Vite ne détecte pas les changements via le bind mount selon l'OS.
-
-**Résolution** : activation de `usePolling: true` dans `vite.config.js`. Le polling consomme légèrement plus de CPU mais résout le problème de manière fiable, indépendamment de l'OS hôte.
+Le watcher de Vite ne détectait pas les changements via le bind mount selon l'OS. Résolu en activant `usePolling: true` dans `vite.config.js`.
 
 ### 2. `node_modules` du conteneur écrasés par le bind mount
 
-**Symptôme** : le service plante au démarrage avec une erreur de module manquant.
-
-**Cause** : le bind mount `./client:/app` écrasait le `node_modules` installé pendant le build.
-
-**Résolution** : ajout d'un volume anonyme `/app/node_modules` après le bind mount, qui prend la priorité et préserve les dépendances installées dans l'image.
+Le bind mount `./client:/app` écrasait le `node_modules` installé pendant le build. Résolu en ajoutant un volume anonyme `/app/node_modules` après le bind mount, qui prend la priorité.
 
 ### 3. Le navigateur ne résout pas `http://api:5000`
 
-**Symptôme** : depuis le frontend, les appels API échouent en dev.
-
-**Cause** : le DNS de Docker Compose (`api`, `database`…) n'est connu qu'à l'intérieur du réseau Docker — pas du navigateur.
-
-**Résolution** : en développement, le port 5000 est exposé et `VITE_API_URL=http://localhost:5000/api`. En production, le client utilise `/api` (URL relative) que nginx redirige côté serveur — c'est le réseau Docker qui fait la résolution.
+Le DNS Docker (`api`, `database`…) n'est connu qu'à l'intérieur du réseau Docker. En dev, on expose le port 5000 et utilise `VITE_API_URL=http://localhost:5000/api`. En prod, le client utilise `/api` (URL relative) que nginx redirige côté serveur.
 
 ### 4. Mount nginx échoué (faux dossier auto-créé)
 
-**Symptôme** : nginx crashait au démarrage avec `not a directory: Are you trying to mount a directory onto a file?`
-
-**Cause** : le fichier `nginx.dev.conf` n'existait pas la première fois — Docker l'a auto-créé en tant que **dossier vide** (root), bloquant tous les démarrages suivants.
-
-**Résolution** : suppression du dossier root via un conteneur Docker (`docker run --rm -v ...`), puis recréation du fichier avec la bonne configuration.
+nginx crashait avec `not a directory: Are you trying to mount a directory onto a file?`. Le fichier `nginx.dev.conf` n'existait pas la première fois — Docker l'avait auto-créé en tant que **dossier vide** (root). Résolu en supprimant le dossier root via un conteneur Docker, puis en recréant le fichier avec la bonne configuration.
 
 ---
 
@@ -292,12 +287,7 @@ docker volume ls                     # vérifier que le volume existe
 
 ---
 
-<div align="center">
-═══════════════════════════════════════════════
-END OF TRANSMISSION
-Le bunker tient. Pour l'instant.
-═══════════════════════════════════════════════
+> **END OF TRANSMISSION**
+> *Le bunker tient. Pour l'instant.*
 
 **Apocaliste © Bunker Control — TP3 Docker Compose**
-
-</div>
