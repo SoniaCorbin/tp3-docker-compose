@@ -413,3 +413,86 @@ input:focus, select:focus {
 }
 
 .stat-card .item-stat { text-align: left; }
+
+/* === Compteur de jours (LED bunker) === */
+.days-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  background: #0a0c08;
+  border: 2px solid var(--accent);
+  position: relative;
+  min-width: 180px;
+  box-shadow:
+    0 0 18px rgba(255, 138, 31, 0.4),
+    inset 0 0 14px rgba(255, 138, 31, 0.08);
+}
+
+.days-counter::before,
+.days-counter::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--accent);
+}
+
+.days-counter::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.days-counter::after  { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+.days-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.days-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+  animation: blink 1.4s infinite;
+}
+
+@keyframes blink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0.2; }
+}
+
+.days-label,
+.days-bottom {
+  font-size: 9px;
+  color: var(--accent);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+}
+
+.days-bottom {
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  margin-top: 2px;
+}
+
+.days-num {
+  font-family: 'Courier New', monospace;
+  font-size: 44px;
+  font-weight: bold;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: 4px;
+  text-shadow:
+    0 0 8px rgba(255, 138, 31, 0.8),
+    0 0 18px rgba(255, 138, 31, 0.5);
+  padding: 2px 0;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 8px rgba(255, 138, 31, 0.8), 0 0 18px rgba(255, 138, 31, 0.5); }
+  to   { text-shadow: 0 0 14px rgba(255, 138, 31, 1), 0 0 28px rgba(255, 138, 31, 0.7); }
+}
